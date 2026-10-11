@@ -30,8 +30,10 @@ class Index {
 public:
     // M: links per node on layers >= 1 (layer 0 allows 2 * M).
     // ef_construction: size of the candidate list while inserting.
+    // heuristic: choose neighbours with the paper's Algorithm 4 (diverse
+    // directions) instead of Algorithm 3 (simply the closest).
     Index(size_t dim, Metric metric, size_t M = 16, size_t ef_construction = 200,
-          uint64_t seed = 0);
+          uint64_t seed = 0, bool heuristic = false);
 
     // Inserts a copy of `vector` (dim floats). Returns its id: 0, 1, 2, ...
     // Paper: Algorithm 1 (INSERT).
@@ -65,8 +67,10 @@ private:
                                        const std::vector<uint32_t>& entry_points,
                                        size_t ef, int layer) const;
 
-    // The ids of the `m` closest candidates.
-    // Paper: Algorithm 3 (SELECT-NEIGHBORS-SIMPLE).
+    // Up to `m` neighbours for a node, chosen from `candidates` (whose
+    // distances are measured from that node).
+    // Paper: Algorithm 3 (SELECT-NEIGHBORS-SIMPLE), or Algorithm 4
+    // (SELECT-NEIGHBORS-HEURISTIC) when the index was built with heuristic.
     std::vector<uint32_t> select_neighbors(std::vector<Neighbor> candidates, size_t m) const;
 
     // Draws a node's top layer: floor(-ln(uniform(0,1]) * 1/ln(M)).
@@ -80,6 +84,7 @@ private:
     Metric metric_;
     size_t M_;
     size_t ef_construction_;
+    bool heuristic_;
     double level_mult_;
     std::mt19937_64 rng_;
 

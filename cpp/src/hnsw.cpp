@@ -8,11 +8,13 @@
 
 namespace hnsw {
 
-Index::Index(size_t dim, Metric metric, size_t M, size_t ef_construction, uint64_t seed)
+Index::Index(size_t dim, Metric metric, size_t M, size_t ef_construction, uint64_t seed,
+             bool heuristic)
     : dim_(dim),
       metric_(metric),
       M_(M),
       ef_construction_(ef_construction),
+      heuristic_(heuristic),
       level_mult_(1.0 / std::log(static_cast<double>(M))),
       rng_(seed) {
     if (dim == 0) throw std::invalid_argument("dim must be positive");
@@ -49,10 +51,26 @@ uint32_t Index::store(const float* vector, int level) {
 
 std::vector<uint32_t> Index::select_neighbors(std::vector<Neighbor> candidates, size_t m) const {
     std::sort(candidates.begin(), candidates.end());
-    if (candidates.size() > m) candidates.resize(m);
     std::vector<uint32_t> ids;
-    ids.reserve(candidates.size());
-    for (const Neighbor& candidate : candidates) ids.push_back(candidate.id);
+    ids.reserve(std::min(m, candidates.size()));
+    for (const Neighbor& candidate : candidates) {
+        if (ids.size() == m) break;
+        bool keep = true;
+        if (heuristic_) {
+            // Algorithm 4: skip a candidate that is closer to a neighbour we
+            // already kept than to the node itself. That neighbour already
+            // leads towards it, so the link is better spent on another
+            // direction. Pruned candidates are not added back (as in hnswlib),
+            // so a node may end up with fewer than m links.
+            for (uint32_t kept : ids) {
+                if (distance(vector(candidate.id), vector(kept)) < candidate.distance) {
+                    keep = false;
+                    break;
+                }
+            }
+        }
+        if (keep) ids.push_back(candidate.id);
+    }
     return ids;
 }
 

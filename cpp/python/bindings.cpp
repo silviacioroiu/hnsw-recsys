@@ -26,11 +26,13 @@ hnsw::Metric parse_metric(const std::string& name) {
 PYBIND11_MODULE(_hnsw, m) {
     py::class_<hnsw::Index>(m, "Index")
         .def(py::init([](size_t dim, const std::string& metric, size_t M,
-                         size_t ef_construction, uint64_t seed) {
-                 return hnsw::Index(dim, parse_metric(metric), M, ef_construction, seed);
+                         size_t ef_construction, uint64_t seed, bool heuristic) {
+                 return hnsw::Index(dim, parse_metric(metric), M, ef_construction, seed,
+                                    heuristic);
              }),
              py::arg("dim"), py::arg("metric") = "ip", py::arg("M") = 16,
-             py::arg("ef_construction") = 200, py::arg("seed") = 0)
+             py::arg("ef_construction") = 200, py::arg("seed") = 0,
+             py::arg("heuristic") = false)
         .def("add",
              [](hnsw::Index& self, const FloatArray& vectors) {
                  if (vectors.ndim() != 2 || static_cast<size_t>(vectors.shape(1)) != self.dim()) {

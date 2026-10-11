@@ -54,7 +54,8 @@ def measure(search, queries: np.ndarray, truth: np.ndarray) -> dict:
 
 def plot(rows: list[dict], Ms: list[int], out_file: Path) -> None:
     surface, ink, muted, grid = "#fcfcfb", "#0b0b0b", "#898781", "#e1e0d9"
-    series = {"hnsw (this repo)": "#2a78d6", "faiss hnsw": "#eb6834"}
+    series = {"hnsw (this repo)": "#2a78d6", "faiss hnsw": "#eb6834",
+              "hnsw (this repo, heuristic)": "#1baf7a"}
     exact = next(r for r in rows if r["method"] == "faiss flat (exact)")
 
     # One panel per M with shared axes, so the panels can be compared directly.
@@ -83,7 +84,7 @@ def plot(rows: list[dict], Ms: list[int], out_file: Path) -> None:
             spine.set_visible(False)
     axes[0].set_ylabel("recall@10 against exact search", color=ink, fontsize=9)
     handles, labels = axes[0].get_legend_handles_labels()
-    fig.legend(handles, labels, frameon=False, fontsize=9, labelcolor=ink, ncols=2,
+    fig.legend(handles, labels, frameon=False, fontsize=9, labelcolor=ink, ncols=3,
                loc="upper right", bbox_to_anchor=(0.99, 1.0))
     fig.suptitle("Recall versus latency; each point is one ef, increasing left to right",
                  color=ink, fontsize=11, x=0.01, ha="left")
@@ -126,7 +127,7 @@ def main() -> None:
         def record(method: str, search, **extra) -> None:
             row = {"method": method, **extra, **measure(search, queries, truth)}
             rows.append(row)
-            print(f"{method:<20} M={str(extra.get('M', '-')):<3} ef={str(extra.get('ef', '-')):<4}"
+            print(f"{method:<28} M={str(extra.get('M', '-')):<3} ef={str(extra.get('ef', '-')):<4}"
                   f" recall@10={row['recall@10']:.4f}  p50={row['latency_ms_p50']:.4f}ms"
                   f"  p95={row['latency_ms_p95']:.4f}ms")
 
@@ -142,11 +143,16 @@ def main() -> None:
         record("faiss flat (exact)", lambda q: flat.search(q[None, :], K)[1][0])
 
         for M in args.M:
-            start = time.perf_counter()
-            ours = Index(dim=dim, metric="ip", M=M, ef_construction=args.ef_construction,
-                         seed=args.seed)
-            ours.add(items)
-            ours_build = round(time.perf_counter() - start, 2)
+            # Our index twice: simple (Algorithm 3) and heuristic (Algorithm 4)
+            # neighbour selection.
+            ours = {}
+            for name, heuristic in (("hnsw (this repo)", False),
+                                    ("hnsw (this repo, heuristic)", True)):
+                start = time.perf_counter()
+                index = Index(dim=dim, metric="ip", M=M, heuristic=heuristic,
+                              ef_construction=args.ef_construction, seed=args.seed)
+                index.add(items)
+                ours[name] = (index, round(time.perf_counter() - start, 2))
 
             start = time.perf_counter()
             theirs = faiss.IndexHNSWFlat(dim, M, faiss.METRIC_INNER_PRODUCT)
@@ -155,8 +161,9 @@ def main() -> None:
             theirs_build = round(time.perf_counter() - start, 2)
 
             for ef in args.ef:
-                record("hnsw (this repo)", lambda q: ours.search(q, K, ef)[0],
-                       M=M, ef=ef, build_seconds=ours_build)
+                for name, (index, build_seconds) in ours.items():
+                    record(name, lambda q: index.search(q, K, ef)[0],
+                           M=M, ef=ef, build_seconds=build_seconds)
                 theirs.hnsw.efSearch = ef
                 record("faiss hnsw", lambda q: theirs.search(q[None, :], K)[1][0],
                        M=M, ef=ef, build_seconds=theirs_build)

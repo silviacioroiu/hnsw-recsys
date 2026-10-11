@@ -25,8 +25,8 @@ std::vector<float> random_vectors(size_t n, size_t dim, uint64_t seed) {
 }
 
 Index build(const std::vector<float>& data, size_t dim, Metric metric, size_t M = 16,
-            size_t ef_construction = 200, uint64_t seed = 0) {
-    Index index(dim, metric, M, ef_construction, seed);
+            size_t ef_construction = 200, uint64_t seed = 0, bool heuristic = false) {
+    Index index(dim, metric, M, ef_construction, seed, heuristic);
     for (size_t i = 0; i < data.size() / dim; ++i) index.add(&data[i * dim]);
     return index;
 }
@@ -224,6 +224,49 @@ TEST(Graph, LevelsFollowTheExponentialDistribution) {
     EXPECT_GT(fraction, 0.045);
     EXPECT_LT(fraction, 0.080);
     EXPECT_EQ(index.max_level(), highest);
+}
+
+// --- Heuristic neighbour selection (Algorithm 4). ---------------------------
+
+TEST(Heuristic, KeepsRecallAndDegreeLimits) {
+    const auto data = random_vectors(2000, kDim, 16);
+    const auto queries = random_vectors(100, kDim, 17);
+    const Index index = build(data, kDim, Metric::L2, 16, 200, 0, true);
+    EXPECT_GE(recall(index, queries, 10, 100), 0.95);
+    for (uint32_t id = 0; id < index.size(); ++id) {
+        EXPECT_FALSE(index.neighbors(id, 0).empty()) << "isolated node " << id;
+        for (int layer = 0; layer <= index.level(id); ++layer) {
+            EXPECT_LE(index.neighbors(id, layer).size(), index.max_degree(layer));
+        }
+    }
+}
+
+TEST(Heuristic, NoKeptNeighbourIsCloserToAnotherThanToTheNode) {
+    // Checked on the last node inserted: nothing has pruned its links since.
+    const auto data = random_vectors(500, kDim, 18);
+    const Index index = build(data, kDim, Metric::L2, 8, 100, 0, true);
+    const uint32_t last = static_cast<uint32_t>(index.size()) - 1;
+    const auto& links = index.neighbors(last, 0);
+    ASSERT_FALSE(links.empty());
+    for (size_t i = 0; i < links.size(); ++i) {
+        for (size_t j = 0; j < i; ++j) {
+            const float to_node = index.distance(index.vector(links[i]), index.vector(last));
+            const float to_kept = index.distance(index.vector(links[i]), index.vector(links[j]));
+            EXPECT_GE(to_kept, to_node);
+        }
+    }
+}
+
+TEST(Heuristic, BuildsASparserGraphThanSimpleSelection) {
+    const auto data = random_vectors(2000, kDim, 19);
+    size_t links[2] = {0, 0};
+    for (int heuristic = 0; heuristic < 2; ++heuristic) {
+        const Index index = build(data, kDim, Metric::L2, 16, 200, 0, heuristic == 1);
+        for (uint32_t id = 0; id < index.size(); ++id) {
+            links[heuristic] += index.neighbors(id, 0).size();
+        }
+    }
+    EXPECT_LT(links[1], links[0]);
 }
 
 TEST(Graph, SameSeedBuildsTheSameGraph) {
