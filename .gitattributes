@@ -1,0 +1,2 @@
+# The repo is edited on Windows but built and run on Linux: keep LF everywhere.
+* text=auto eol=lf
