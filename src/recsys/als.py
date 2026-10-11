@@ -83,7 +83,7 @@ def main() -> None:
     parser.add_argument("--artifacts", type=Path, default=Path("data/artifacts/als"))
     parser.add_argument("--factors", type=int, nargs="+", default=[32, 64, 128])
     parser.add_argument("--regularization", type=float, nargs="+", default=[0.01, 0.1])
-    parser.add_argument("--alpha", type=float, nargs="+", default=[10.0, 40.0])
+    parser.add_argument("--alpha", type=float, nargs="+", default=[1.0, 3.0, 10.0, 40.0])
     parser.add_argument("--iterations", type=int, default=15)
     parser.add_argument("--fallback-window-days", type=int, default=30)
     parser.add_argument("--min-rating", type=float, default=4.0)
@@ -91,6 +91,15 @@ def main() -> None:
     parser.add_argument("--seed", type=int, default=0)
     args = parser.parse_args()
     set_seed(args.seed)
+
+    params = {"grid": {"factors": args.factors, "regularization": args.regularization,
+                       "alpha": args.alpha},
+              "iterations": args.iterations, "threads": args.threads,
+              "fallback_window_days": args.fallback_window_days,
+              "min_rating": args.min_rating, "selection_metric": "recall@10 on val",
+              "split": json.loads((args.split / "split.json").read_text())}
+    # Collected before the long run, so it describes the code that started it.
+    runinfo = collect_runinfo(params, args.seed, packages=("scipy", "implicit"))
 
     train, val, test = (pd.read_parquet(args.split / f"{name}.parquet")
                         for name in ("train", "val", "test"))
@@ -125,16 +134,10 @@ def main() -> None:
     for name in ("user_factors", "item_factors", "user_ids", "item_ids"):
         np.save(args.artifacts / f"{name}.npy", getattr(model, name))
 
-    params = {"grid": {"factors": args.factors, "regularization": args.regularization,
-                       "alpha": args.alpha},
-              "iterations": args.iterations, "threads": args.threads,
-              "fallback_window_days": args.fallback_window_days,
-              "min_rating": args.min_rating, "selection_metric": "recall@10 on val",
-              "split": json.loads((args.split / "split.json").read_text())}
     args.out.mkdir(parents=True, exist_ok=True)
     out_file = args.out / "m2_als.json"
     out_file.write_text(json.dumps({
-        "runinfo": collect_runinfo(params, args.seed, packages=("scipy", "implicit")),
+        "runinfo": runinfo,
         "validation_grid": grid,
         "test": {"model": "als", "eval_window": "test", **test_row},
     }, indent=2))
