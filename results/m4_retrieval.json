@@ -1,0 +1,112 @@
+{
+  "runinfo": {
+    "timestamp_utc": "2026-10-11T16:10:53+00:00",
+    "seed": 0,
+    "params": {
+      "M": 16,
+      "ef_construction": 200,
+      "ef": [
+        10,
+        50,
+        100,
+        200
+      ],
+      "fallback_window_days": 30,
+      "min_rating": 4.0,
+      "embeddings": {
+        "model": "als",
+        "eval_window": "test",
+        "factors": 64,
+        "regularization": 0.1,
+        "alpha": 3.0,
+        "recall@10": 0.05278672164147301,
+        "ndcg@10": 0.1418671407619438,
+        "recall@50": 0.15051216709945325,
+        "ndcg@50": 0.13962791671873198,
+        "n_users_evaluated": 6330,
+        "n_users_without_history": 11946,
+        "frac_positives_on_unknown_items": 0.12649541302113243,
+        "fit_seconds": 32.6
+      }
+    },
+    "git_commit": "cebd0bb06e90fc2a910611e8e2ba14bca436d2a8",
+    "git_dirty": false,
+    "hardware": {
+      "machine": "aarch64",
+      "cpu": "aarch64",
+      "logical_cores": 12,
+      "ram": "7913464 kB"
+    },
+    "software": {
+      "os": "Linux-6.6.87.2-microsoft-standard-WSL2-aarch64-with-glibc2.39",
+      "python": "3.12.3",
+      "numpy": "2.5.4",
+      "pandas": "3.0.6",
+      "pyarrow": "26.0.0",
+      "pybind11": "3.1.0"
+    }
+  },
+  "n_items": 31217,
+  "hnsw_build_seconds": 4.4,
+  "results": [
+    {
+      "search": "exact",
+      "recall@10": 0.05278672164147301,
+      "ndcg@10": 0.1418671407619438,
+      "recall@50": 0.15051216709945325,
+      "ndcg@50": 0.13962791671873198,
+      "n_users_evaluated": 6330,
+      "n_users_without_history": 11946,
+      "frac_positives_on_unknown_items": 0.12649541302113243,
+      "eval_ms_per_user": 0.718
+    },
+    {
+      "search": "hnsw",
+      "ef": 10,
+      "recall@10": 0.05278932491110048,
+      "ndcg@10": 0.1418889553523095,
+      "recall@50": 0.15063444549469737,
+      "ndcg@50": 0.1396875615412612,
+      "n_users_evaluated": 6330,
+      "n_users_without_history": 11946,
+      "frac_positives_on_unknown_items": 0.12649541302113243,
+      "eval_ms_per_user": 0.468
+    },
+    {
+      "search": "hnsw",
+      "ef": 50,
+      "recall@10": 0.05278932491110048,
+      "ndcg@10": 0.1418889553523095,
+      "recall@50": 0.15063444549469737,
+      "ndcg@50": 0.1396875615412612,
+      "n_users_evaluated": 6330,
+      "n_users_without_history": 11946,
+      "frac_positives_on_unknown_items": 0.12649541302113243,
+      "eval_ms_per_user": 0.463
+    },
+    {
+      "search": "hnsw",
+      "ef": 100,
+      "recall@10": 0.05278897846837439,
+      "ndcg@10": 0.14187719143938438,
+      "recall@50": 0.15061194694539085,
+      "ndcg@50": 0.13966786052839367,
+      "n_users_evaluated": 6330,
+      "n_users_without_history": 11946,
+      "frac_positives_on_unknown_items": 0.12649541302113243,
+      "eval_ms_per_user": 0.458
+    },
+    {
+      "search": "hnsw",
+      "ef": 200,
+      "recall@10": 0.05278897846837439,
+      "ndcg@10": 0.14187719143938438,
+      "recall@50": 0.1505608660737089,
+      "ndcg@50": 0.13963896951108823,
+      "n_users_evaluated": 6330,
+      "n_users_without_history": 11946,
+      "frac_positives_on_unknown_items": 0.12649541302113243,
+      "eval_ms_per_user": 0.465
+    }
+  ]
+}

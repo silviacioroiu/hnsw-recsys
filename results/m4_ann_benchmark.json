@@ -1,0 +1,423 @@
+{
+  "runinfo": {
+    "timestamp_utc": "2026-10-11T16:11:18+00:00",
+    "seed": 0,
+    "params": {
+      "k": 10,
+      "n_items": 31217,
+      "dim": 64,
+      "n_queries": 1000,
+      "metric": "inner product",
+      "M": [
+        8,
+        16,
+        32
+      ],
+      "ef": [
+        10,
+        20,
+        50,
+        100,
+        200,
+        500
+      ],
+      "ef_construction": 200,
+      "threads": 1,
+      "warmup_queries": 50,
+      "timing": "one query per call from Python, perf_counter_ns, fastest of 3 runs per query"
+    },
+    "git_commit": "cebd0bb06e90fc2a910611e8e2ba14bca436d2a8",
+    "git_dirty": false,
+    "hardware": {
+      "machine": "aarch64",
+      "cpu": "aarch64",
+      "logical_cores": 12,
+      "ram": "7913464 kB"
+    },
+    "software": {
+      "os": "Linux-6.6.87.2-microsoft-standard-WSL2-aarch64-with-glibc2.39",
+      "python": "3.12.3",
+      "numpy": "2.5.4",
+      "pandas": "3.0.6",
+      "pyarrow": "26.0.0",
+      "faiss-cpu": "1.15.1",
+      "pybind11": "3.1.0"
+    }
+  },
+  "results": [
+    {
+      "method": "numpy (exact)",
+      "recall@10": 1.0,
+      "latency_ms_mean": 0.40318573700000004,
+      "latency_ms_p50": 0.4016295,
+      "latency_ms_p95": 0.4977431
+    },
+    {
+      "method": "faiss flat (exact)",
+      "recall@10": 1.0,
+      "latency_ms_mean": 0.1687356,
+      "latency_ms_p50": 0.163326,
+      "latency_ms_p95": 0.20018719999999998
+    },
+    {
+      "method": "hnsw (this repo)",
+      "M": 8,
+      "ef": 10,
+      "build_seconds": 3.63,
+      "recall@10": 0.911,
+      "latency_ms_mean": 0.008775959,
+      "latency_ms_p50": 0.00858,
+      "latency_ms_p95": 0.011031049999999999
+    },
+    {
+      "method": "faiss hnsw",
+      "M": 8,
+      "ef": 10,
+      "build_seconds": 2.55,
+      "recall@10": 0.8428,
+      "latency_ms_mean": 0.008183098,
+      "latency_ms_p50": 0.007967,
+      "latency_ms_p95": 0.01011205
+    },
+    {
+      "method": "hnsw (this repo)",
+      "M": 8,
+      "ef": 20,
+      "build_seconds": 3.63,
+      "recall@10": 0.9692,
+      "latency_ms_mean": 0.012615739,
+      "latency_ms_p50": 0.01236,
+      "latency_ms_p95": 0.015935
+    },
+    {
+      "method": "faiss hnsw",
+      "M": 8,
+      "ef": 20,
+      "build_seconds": 2.55,
+      "recall@10": 0.9411,
+      "latency_ms_mean": 0.015335483,
+      "latency_ms_p50": 0.015321,
+      "latency_ms_p95": 0.020128099999999993
+    },
+    {
+      "method": "hnsw (this repo)",
+      "M": 8,
+      "ef": 50,
+      "build_seconds": 3.63,
+      "recall@10": 0.9961,
+      "latency_ms_mean": 0.023043621,
+      "latency_ms_p50": 0.022778,
+      "latency_ms_p95": 0.027579
+    },
+    {
+      "method": "faiss hnsw",
+      "M": 8,
+      "ef": 50,
+      "build_seconds": 2.55,
+      "recall@10": 0.9895,
+      "latency_ms_mean": 0.021163504,
+      "latency_ms_p50": 0.020838,
+      "latency_ms_p95": 0.024316099999999993
+    },
+    {
+      "method": "hnsw (this repo)",
+      "M": 8,
+      "ef": 100,
+      "build_seconds": 3.63,
+      "recall@10": 0.999,
+      "latency_ms_mean": 0.040018333999999996,
+      "latency_ms_p50": 0.039429,
+      "latency_ms_p95": 0.0468901
+    },
+    {
+      "method": "faiss hnsw",
+      "M": 8,
+      "ef": 100,
+      "build_seconds": 2.55,
+      "recall@10": 0.9982,
+      "latency_ms_mean": 0.040912656,
+      "latency_ms_p50": 0.040041,
+      "latency_ms_p95": 0.04853019999999999
+    },
+    {
+      "method": "hnsw (this repo)",
+      "M": 8,
+      "ef": 200,
+      "build_seconds": 3.63,
+      "recall@10": 0.9998,
+      "latency_ms_mean": 0.073836564,
+      "latency_ms_p50": 0.073137,
+      "latency_ms_p95": 0.08417919999999998
+    },
+    {
+      "method": "faiss hnsw",
+      "M": 8,
+      "ef": 200,
+      "build_seconds": 2.55,
+      "recall@10": 0.9995,
+      "latency_ms_mean": 0.08900638900000002,
+      "latency_ms_p50": 0.08856,
+      "latency_ms_p95": 0.09521114999999998
+    },
+    {
+      "method": "hnsw (this repo)",
+      "M": 8,
+      "ef": 500,
+      "build_seconds": 3.63,
+      "recall@10": 1.0,
+      "latency_ms_mean": 0.179967724,
+      "latency_ms_p50": 0.1778365,
+      "latency_ms_p95": 0.206437
+    },
+    {
+      "method": "faiss hnsw",
+      "M": 8,
+      "ef": 500,
+      "build_seconds": 2.55,
+      "recall@10": 1.0,
+      "latency_ms_mean": 0.31812538600000007,
+      "latency_ms_p50": 0.314916,
+      "latency_ms_p95": 0.3339311
+    },
+    {
+      "method": "hnsw (this repo)",
+      "M": 16,
+      "ef": 10,
+      "build_seconds": 4.41,
+      "recall@10": 0.9715,
+      "latency_ms_mean": 0.011013993,
+      "latency_ms_p50": 0.010725,
+      "latency_ms_p95": 0.013999099999999995
+    },
+    {
+      "method": "faiss hnsw",
+      "M": 16,
+      "ef": 10,
+      "build_seconds": 3.04,
+      "recall@10": 0.874,
+      "latency_ms_mean": 0.009593369000000001,
+      "latency_ms_p50": 0.009397,
+      "latency_ms_p95": 0.01174605
+    },
+    {
+      "method": "hnsw (this repo)",
+      "M": 16,
+      "ef": 20,
+      "build_seconds": 4.41,
+      "recall@10": 0.9917,
+      "latency_ms_mean": 0.016304571999999996,
+      "latency_ms_p50": 0.015628,
+      "latency_ms_p95": 0.021553
+    },
+    {
+      "method": "faiss hnsw",
+      "M": 16,
+      "ef": 20,
+      "build_seconds": 3.04,
+      "recall@10": 0.9597,
+      "latency_ms_mean": 0.013386384,
+      "latency_ms_p50": 0.013176,
+      "latency_ms_p95": 0.015526
+    },
+    {
+      "method": "hnsw (this repo)",
+      "M": 16,
+      "ef": 50,
+      "build_seconds": 4.41,
+      "recall@10": 0.9989,
+      "latency_ms_mean": 0.027614069,
+      "latency_ms_p50": 0.02717,
+      "latency_ms_p95": 0.03432609999999999
+    },
+    {
+      "method": "faiss hnsw",
+      "M": 16,
+      "ef": 50,
+      "build_seconds": 3.04,
+      "recall@10": 0.9958,
+      "latency_ms_mean": 0.026738381999999998,
+      "latency_ms_p50": 0.02666,
+      "latency_ms_p95": 0.029213
+    },
+    {
+      "method": "hnsw (this repo)",
+      "M": 16,
+      "ef": 100,
+      "build_seconds": 4.41,
+      "recall@10": 1.0,
+      "latency_ms_mean": 0.047499234,
+      "latency_ms_p50": 0.04617,
+      "latency_ms_p95": 0.05873305
+    },
+    {
+      "method": "faiss hnsw",
+      "M": 16,
+      "ef": 100,
+      "build_seconds": 3.04,
+      "recall@10": 0.9995,
+      "latency_ms_mean": 0.054849147,
+      "latency_ms_p50": 0.052075,
+      "latency_ms_p95": 0.06637509999999999
+    },
+    {
+      "method": "hnsw (this repo)",
+      "M": 16,
+      "ef": 200,
+      "build_seconds": 4.41,
+      "recall@10": 1.0,
+      "latency_ms_mean": 0.08469206399999998,
+      "latency_ms_p50": 0.083931,
+      "latency_ms_p95": 0.0981301
+    },
+    {
+      "method": "faiss hnsw",
+      "M": 16,
+      "ef": 200,
+      "build_seconds": 3.04,
+      "recall@10": 1.0,
+      "latency_ms_mean": 0.114998319,
+      "latency_ms_p50": 0.1121645,
+      "latency_ms_p95": 0.13539905
+    },
+    {
+      "method": "hnsw (this repo)",
+      "M": 16,
+      "ef": 500,
+      "build_seconds": 4.41,
+      "recall@10": 1.0,
+      "latency_ms_mean": 0.206420999,
+      "latency_ms_p50": 0.202682,
+      "latency_ms_p95": 0.25242335
+    },
+    {
+      "method": "faiss hnsw",
+      "M": 16,
+      "ef": 500,
+      "build_seconds": 3.04,
+      "recall@10": 1.0,
+      "latency_ms_mean": 0.375236058,
+      "latency_ms_p50": 0.360233,
+      "latency_ms_p95": 0.47003375
+    },
+    {
+      "method": "hnsw (this repo)",
+      "M": 32,
+      "ef": 10,
+      "build_seconds": 6.49,
+      "recall@10": 0.9929,
+      "latency_ms_mean": 0.013934054999999999,
+      "latency_ms_p50": 0.013721,
+      "latency_ms_p95": 0.016793
+    },
+    {
+      "method": "faiss hnsw",
+      "M": 32,
+      "ef": 10,
+      "build_seconds": 3.52,
+      "recall@10": 0.8873,
+      "latency_ms_mean": 0.012911994,
+      "latency_ms_p50": 0.012697,
+      "latency_ms_p95": 0.015769
+    },
+    {
+      "method": "hnsw (this repo)",
+      "M": 32,
+      "ef": 20,
+      "build_seconds": 6.49,
+      "recall@10": 0.9981,
+      "latency_ms_mean": 0.019519102,
+      "latency_ms_p50": 0.019149,
+      "latency_ms_p95": 0.023859
+    },
+    {
+      "method": "faiss hnsw",
+      "M": 32,
+      "ef": 20,
+      "build_seconds": 3.52,
+      "recall@10": 0.9707,
+      "latency_ms_mean": 0.018990145000000003,
+      "latency_ms_p50": 0.018841,
+      "latency_ms_p95": 0.022323
+    },
+    {
+      "method": "hnsw (this repo)",
+      "M": 32,
+      "ef": 50,
+      "build_seconds": 6.49,
+      "recall@10": 1.0,
+      "latency_ms_mean": 0.033885995,
+      "latency_ms_p50": 0.033586,
+      "latency_ms_p95": 0.041471
+    },
+    {
+      "method": "faiss hnsw",
+      "M": 32,
+      "ef": 50,
+      "build_seconds": 3.52,
+      "recall@10": 0.9976,
+      "latency_ms_mean": 0.035716768,
+      "latency_ms_p50": 0.035737,
+      "latency_ms_p95": 0.038911
+    },
+    {
+      "method": "hnsw (this repo)",
+      "M": 32,
+      "ef": 100,
+      "build_seconds": 6.49,
+      "recall@10": 1.0,
+      "latency_ms_mean": 0.055865967999999995,
+      "latency_ms_p50": 0.0549875,
+      "latency_ms_p95": 0.068197
+    },
+    {
+      "method": "faiss hnsw",
+      "M": 32,
+      "ef": 100,
+      "build_seconds": 3.52,
+      "recall@10": 0.9996,
+      "latency_ms_mean": 0.066862189,
+      "latency_ms_p50": 0.066968,
+      "latency_ms_p95": 0.07240105
+    },
+    {
+      "method": "hnsw (this repo)",
+      "M": 32,
+      "ef": 200,
+      "build_seconds": 6.49,
+      "recall@10": 1.0,
+      "latency_ms_mean": 0.10517569900000001,
+      "latency_ms_p50": 0.10203999999999999,
+      "latency_ms_p95": 0.13365554999999998
+    },
+    {
+      "method": "faiss hnsw",
+      "M": 32,
+      "ef": 200,
+      "build_seconds": 3.52,
+      "recall@10": 0.9999,
+      "latency_ms_mean": 0.13770666499999998,
+      "latency_ms_p50": 0.137725,
+      "latency_ms_p95": 0.1494041
+    },
+    {
+      "method": "hnsw (this repo)",
+      "M": 32,
+      "ef": 500,
+      "build_seconds": 6.49,
+      "recall@10": 1.0,
+      "latency_ms_mean": 0.22982167900000003,
+      "latency_ms_p50": 0.227631,
+      "latency_ms_p95": 0.2669571
+    },
+    {
+      "method": "faiss hnsw",
+      "M": 32,
+      "ef": 500,
+      "build_seconds": 3.52,
+      "recall@10": 1.0,
+      "latency_ms_mean": 0.422638504,
+      "latency_ms_p50": 0.422957,
+      "latency_ms_p95": 0.45119615
+    }
+  ]
+}
