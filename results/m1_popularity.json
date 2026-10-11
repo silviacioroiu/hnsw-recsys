@@ -1,0 +1,90 @@
+{
+  "runinfo": {
+    "timestamp_utc": "2026-10-11T14:55:40+00:00",
+    "seed": 0,
+    "params": {
+      "window_days": 30,
+      "min_rating": 4.0,
+      "split": {
+        "dataset": {
+          "name": "ml-25m",
+          "url": "https://files.grouplens.org/datasets/movielens/ml-25m.zip",
+          "md5": "6b51fb2759a8657d3bfcbfc42b592ada",
+          "sha256": "8b21cfb7eb1706b4ec0aac894368d90acf26ebdfb6aced3ebd4ad5bd1eb9c6aa"
+        },
+        "val_q": 0.8,
+        "test_q": 0.9,
+        "t_val": 1466837397,
+        "t_test": 1515033890,
+        "t_val_utc": "2016-06-25T06:49:57+00:00",
+        "t_test_utc": "2018-01-04T02:44:50+00:00",
+        "rows": {
+          "train": 20000075,
+          "val": 2500009,
+          "test": 2500011
+        }
+      }
+    },
+    "git_commit": "ca468cfd04a73823d06f604a3df9084763b7b19c",
+    "git_dirty": false,
+    "hardware": {
+      "machine": "aarch64",
+      "cpu": "aarch64",
+      "logical_cores": 12,
+      "ram": "7913464 kB"
+    },
+    "software": {
+      "os": "Linux-6.6.87.2-microsoft-standard-WSL2-aarch64-with-glibc2.39",
+      "python": "3.12.3",
+      "numpy": "2.5.4",
+      "pandas": "3.0.6",
+      "pyarrow": "26.0.0"
+    }
+  },
+  "results": [
+    {
+      "model": "popular_all_time",
+      "eval_window": "val",
+      "recall@10": 0.02888239565084756,
+      "ndcg@10": 0.08492517887110942,
+      "recall@50": 0.08775838444470471,
+      "ndcg@50": 0.08496141108303032,
+      "n_users_evaluated": 5149,
+      "n_users_without_history": 12698,
+      "frac_positives_on_unknown_items": 0.12431904888652294
+    },
+    {
+      "model": "popular_last_30d",
+      "eval_window": "val",
+      "recall@10": 0.06651418773154949,
+      "ndcg@10": 0.14789033723741532,
+      "recall@50": 0.17800161221762134,
+      "ndcg@50": 0.15473165594117225,
+      "n_users_evaluated": 5149,
+      "n_users_without_history": 12698,
+      "frac_positives_on_unknown_items": 0.12431904888652294
+    },
+    {
+      "model": "popular_all_time",
+      "eval_window": "test",
+      "recall@10": 0.027814642861826135,
+      "ndcg@10": 0.07775557906840046,
+      "recall@50": 0.0848736684568718,
+      "ndcg@50": 0.07898924488558327,
+      "n_users_evaluated": 6330,
+      "n_users_without_history": 11946,
+      "frac_positives_on_unknown_items": 0.12649541302113243
+    },
+    {
+      "model": "popular_last_30d",
+      "eval_window": "test",
+      "recall@10": 0.05450105180727466,
+      "ndcg@10": 0.12394116354683891,
+      "recall@50": 0.1603992123823764,
+      "ndcg@50": 0.13360772582822725,
+      "n_users_evaluated": 6330,
+      "n_users_without_history": 11946,
+      "frac_positives_on_unknown_items": 0.12649541302113243
+    }
+  ]
+}
