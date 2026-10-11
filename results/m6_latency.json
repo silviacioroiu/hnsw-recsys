@@ -1,0 +1,67 @@
+{
+  "runinfo": {
+    "timestamp_utc": "2026-10-11T16:39:17+00:00",
+    "seed": 0,
+    "params": {
+      "url": "http://127.0.0.1:8000",
+      "server": "uvicorn directly in WSL2 Ubuntu 24.04 (no Docker), Python 3.12, 1 worker",
+      "k": 10,
+      "requests_per_level": 3000,
+      "warmup_requests": 200,
+      "users": "known users sampled uniformly with replacement",
+      "client": "httpx.AsyncClient on the same machine as the server",
+      "health": {
+        "status": "ok",
+        "items": 31217,
+        "users": 150591
+      }
+    },
+    "git_commit": "241b60a1a102025c8344710f05b7d87a885d0357",
+    "git_dirty": false,
+    "hardware": {
+      "machine": "aarch64",
+      "cpu": "aarch64",
+      "logical_cores": 12,
+      "ram": "7913464 kB"
+    },
+    "software": {
+      "os": "Linux-6.6.87.2-microsoft-standard-WSL2-aarch64-with-glibc2.39",
+      "python": "3.12.3",
+      "numpy": "2.5.4",
+      "pandas": "3.0.6",
+      "pyarrow": "26.0.0",
+      "httpx": "0.28.1",
+      "fastapi": "0.143.0",
+      "uvicorn": "0.54.0"
+    }
+  },
+  "results": [
+    {
+      "concurrency": 1,
+      "requests": 3000,
+      "errors": 0,
+      "requests_per_second": 71.5,
+      "latency_ms_p50": 12.24,
+      "latency_ms_p95": 25.16,
+      "latency_ms_p99": 33.14
+    },
+    {
+      "concurrency": 8,
+      "requests": 3000,
+      "errors": 0,
+      "requests_per_second": 130.3,
+      "latency_ms_p50": 40.03,
+      "latency_ms_p95": 186.92,
+      "latency_ms_p99": 334.67
+    },
+    {
+      "concurrency": 32,
+      "requests": 3000,
+      "errors": 0,
+      "requests_per_second": 76.7,
+      "latency_ms_p50": 281.72,
+      "latency_ms_p95": 1192.49,
+      "latency_ms_p99": 1816.42
+    }
+  ]
+}
