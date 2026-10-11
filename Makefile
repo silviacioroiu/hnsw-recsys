@@ -1,4 +1,4 @@
-.PHONY: setup bindings data split m1 m2 m4 m5 test cpp-test
+.PHONY: setup bindings data split m1 m2 m4 m5 m6-export serve m6-load test cpp-test
 
 setup:
 	python -m pip install -e ".[dev,bench]"
@@ -32,6 +32,20 @@ m4: bindings
 # Reproduces the M5 results: results/m5_ranking.json (needs m2)
 m5:
 	python -m recsys.ranking
+
+# Exports the serving files and checks the served pipeline's quality:
+# results/m6_serving_quality.json (needs m2 and m5)
+m6-export: bindings
+	python -m recsys.serving
+
+# Runs the API without Docker, for development.
+serve:
+	uvicorn recsys.service:app_from_env --factory --host 127.0.0.1 --port 8000
+
+# Measures latency against the Docker service: results/m6_latency.json
+# Start it first with: docker compose up -d --build --wait
+m6-load:
+	python benchmarks/load_test.py --server "docker compose, python:3.11-slim, 1 uvicorn worker"
 
 test:
 	python -m pytest -q

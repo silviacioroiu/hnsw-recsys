@@ -4,9 +4,11 @@ Everything here is computed from `history` only, so a builder made from the
 train window can never see the validation labels it is used to learn from.
 """
 
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
-from scipy.sparse import csr_matrix
+from scipy.sparse import csr_matrix, load_npz, save_npz
 
 from recsys.als import ALSRecommender
 
@@ -36,6 +38,7 @@ class FeatureBuilder:
                  min_rating: float = 4.0, n_als: int = 500, n_popular: int = 100,
                  window_days: int = 30):
         self.als = als
+        self.index = None   # exact search unless use_index() is called
         self.n_als = n_als
         self.n_popular = n_popular
         self.item_ids = als.item_ids
@@ -95,6 +98,43 @@ class FeatureBuilder:
             (np.ones(len(liked), dtype=np.float32), (user_codes, item_codes)),
             shape=(len(like_users), len(items)))
 
+    def use_index(self, index) -> None:
+        """Retrieve the ALS candidates from an ANN index over `als.item_factors`
+        (ids = row numbers) instead of scoring every item."""
+        self.index = index
+
+    def save(self, directory: Path) -> None:
+        """Everything except the ALS embeddings, which are saved separately."""
+        directory.mkdir(parents=True, exist_ok=True)
+        np.savez(
+            directory / "features.npz",
+            sizes=np.array([self.n_als, self.n_popular]),
+            popular_rows=self.popular_rows, genres=self.genres, genre_count=self.genre_count,
+            user_ids=np.array(list(self.user_stats)),
+            user_stats=np.stack(list(self.user_stats.values())),
+            like_users=np.array(list(self.like_row)),   # in row order
+            **self.item_features)
+        save_npz(directory / "likes.npz", self.likes)
+
+    @classmethod
+    def load(cls, directory: Path, als: ALSRecommender) -> "FeatureBuilder":
+        builder = cls.__new__(cls)   # skip __init__, which needs the full history
+        stored = np.load(directory / "features.npz")
+        builder.als = als
+        builder.index = None
+        builder.n_als, builder.n_popular = (int(size) for size in stored["sizes"])
+        builder.item_ids = als.item_ids
+        builder.item_row = {int(item): row for row, item in enumerate(als.item_ids)}
+        builder.popular_rows = stored["popular_rows"]
+        builder.genres = stored["genres"]
+        builder.genre_count = stored["genre_count"]
+        builder.item_features = {name: stored[name] for name in FEATURES
+                                 if name.startswith("item_")}
+        builder.user_stats = dict(zip(stored["user_ids"].tolist(), stored["user_stats"]))
+        builder.like_row = {user: row for row, user in enumerate(stored["like_users"].tolist())}
+        builder.likes = load_npz(directory / "likes.npz")
+        return builder
+
     def _genre_match(self, user_id: int, rows: np.ndarray) -> np.ndarray:
         """How well each item's genres fit the genres of the films the user liked."""
         like_row = self.like_row.get(user_id)
@@ -109,9 +149,15 @@ class FeatureBuilder:
     def candidates(self, user_id: int, exclude: set[int]) -> tuple[np.ndarray, np.ndarray]:
         """Returns (item_ids, features): ALS candidates in score order, then the
         popular ones not already present. features has one column per FEATURES."""
+        excluded_rows = [self.item_row[item] for item in exclude if item in self.item_row]
+        return self.candidates_from_rows(user_id, np.asarray(excluded_rows, dtype=np.int64))
+
+    def candidates_from_rows(self, user_id: int,
+                             excluded_rows: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+        """Like `candidates`, with the excluded items given as row numbers."""
         n_items = len(self.item_ids)
         allowed = np.ones(n_items, dtype=bool)
-        allowed[[self.item_row[item] for item in exclude if item in self.item_row]] = False
+        allowed[excluded_rows] = False
 
         user_row = self.als.user_row.get(user_id)
         n = min(self.n_als, int(allowed.sum()))
@@ -119,11 +165,19 @@ class FeatureBuilder:
             # No embedding: only popular candidates, with missing ALS features.
             scores = np.full(n_items, np.nan, dtype=np.float32)
             als_rows = np.empty(0, dtype=np.int64)
-        else:
+        elif self.index is None:
             scores = self.als.item_factors @ self.als.user_factors[user_row]
             masked = np.where(allowed, scores, -np.inf)
             als_rows = np.argpartition(-masked, n - 1)[:n]
             als_rows = als_rows[np.argsort(-masked[als_rows], kind="stable")]
+        else:
+            # The index cannot skip items while searching, so fetch enough for
+            # n to survive the filter. ef = 0 means "as wide as the request".
+            user_vector = self.als.user_factors[user_row]
+            found, _ = self.index.search(user_vector, self.n_als + len(excluded_rows), 0)
+            found = found.astype(np.int64)
+            als_rows = found[allowed[found]][:n]
+            scores = None
 
         popular = self.popular_rows[allowed[self.popular_rows]][:self.n_popular]
         extra = popular[~np.isin(popular, als_rows)]
@@ -131,10 +185,14 @@ class FeatureBuilder:
         # Popular-only candidates all share the rank just past the ALS list.
         als_rank = np.concatenate([np.arange(1, len(als_rows) + 1),
                                    np.full(len(extra), self.n_als + 1)])
+        if scores is None:   # index path: score only the candidates
+            scores_of_rows = self.als.item_factors[rows] @ user_vector
+        else:
+            scores_of_rows = scores[rows]
 
         user = self.user_stats.get(user_id, np.full(4, np.nan, dtype=np.float32))
         columns = {
-            "als_score": scores[rows],
+            "als_score": scores_of_rows,
             "als_rank": als_rank,
             "genre_match": self._genre_match(user_id, rows),
             **{name: values[rows] for name, values in self.item_features.items()},

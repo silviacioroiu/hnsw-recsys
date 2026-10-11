@@ -1,0 +1,19 @@
+services:
+  api:
+    build: .
+    image: hnsw-recsys:latest
+    # Loopback only: this is a local demo, not a public service.
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - ./data/artifacts:/artifacts:ro
+    init: true
+    restart: unless-stopped
+    healthcheck:
+      # The slim image has no curl; Python is always there.
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      # Start-up loads the model and builds the index before the port opens.
+      start_period: 60s
