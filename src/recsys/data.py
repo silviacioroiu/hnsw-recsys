@@ -64,6 +64,17 @@ def load_ratings(csv_path: Path) -> pd.DataFrame:
     return ratings.rename(columns={"userId": "user_id", "movieId": "item_id"})
 
 
+def load_movies(csv_path: Path) -> pd.DataFrame:
+    """Load movies.csv as (item_id, title, genres, year).
+
+    genres is a '|'-separated string; year is parsed from the "(1995)" that
+    ends most titles and is NaN where the title has none.
+    """
+    movies = pd.read_csv(csv_path).rename(columns={"movieId": "item_id"})
+    movies["year"] = movies["title"].str.extract(r"\((\d{4})\)\s*$")[0].astype("float32")
+    return movies
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", type=Path, default=Path("data"))

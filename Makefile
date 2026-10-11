@@ -1,4 +1,4 @@
-.PHONY: setup bindings data split m1 m2 m4 test cpp-test
+.PHONY: setup bindings data split m1 m2 m4 m5 test cpp-test
 
 setup:
 	python -m pip install -e ".[dev,bench]"
@@ -28,6 +28,10 @@ m2:
 m4: bindings
 	python -m recsys.ann
 	python benchmarks/ann_benchmark.py
+
+# Reproduces the M5 results: results/m5_ranking.json (needs m2)
+m5:
+	python -m recsys.ranking
 
 test:
 	python -m pytest -q
