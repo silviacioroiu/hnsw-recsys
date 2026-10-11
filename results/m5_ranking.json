@@ -1,0 +1,105 @@
+{
+  "runinfo": {
+    "timestamp_utc": "2026-10-11T16:21:48+00:00",
+    "seed": 0,
+    "params": {
+      "n_als": 500,
+      "n_popular": 100,
+      "window_days": 30,
+      "min_rating": 4.0,
+      "threads": 0,
+      "als": {
+        "factors": 64,
+        "regularization": 0.1,
+        "alpha": 3.0,
+        "iterations": 15
+      },
+      "features": [
+        "als_score",
+        "als_rank",
+        "genre_match",
+        "item_likes_all",
+        "item_likes_30d",
+        "item_likes_7d",
+        "item_pop_rank",
+        "item_mean_rating",
+        "item_n_ratings",
+        "item_age_days",
+        "item_year",
+        "user_n_ratings",
+        "user_n_likes",
+        "user_mean_rating",
+        "user_idle_days"
+      ]
+    },
+    "git_commit": "0867839b870d6048bffd08c4c79cb3b14df13b89",
+    "git_dirty": false,
+    "hardware": {
+      "machine": "aarch64",
+      "cpu": "aarch64",
+      "logical_cores": 12,
+      "ram": "7913484 kB"
+    },
+    "software": {
+      "os": "Linux-6.6.87.2-microsoft-standard-WSL2-aarch64-with-glibc2.39",
+      "python": "3.12.3",
+      "numpy": "2.5.4",
+      "pandas": "3.0.6",
+      "pyarrow": "26.0.0",
+      "lightgbm": "4.7.0",
+      "implicit": "0.7.3",
+      "scipy": "1.18.1"
+    }
+  },
+  "training": {
+    "users": 4823,
+    "rows": 2581780,
+    "positives": 82342,
+    "trees": 102,
+    "seconds": 42.2,
+    "holdout_ndcg@10": 0.25461237484340865
+  },
+  "feature_importance_gain": {
+    "item_likes_30d": 0.3648,
+    "als_rank": 0.2237,
+    "item_age_days": 0.0953,
+    "item_likes_7d": 0.062,
+    "als_score": 0.0421,
+    "genre_match": 0.0366,
+    "user_idle_days": 0.0339,
+    "item_pop_rank": 0.0281,
+    "item_n_ratings": 0.0258,
+    "user_n_ratings": 0.0212,
+    "user_mean_rating": 0.0184,
+    "user_n_likes": 0.0174,
+    "item_likes_all": 0.013,
+    "item_mean_rating": 0.0102,
+    "item_year": 0.0075
+  },
+  "test": [
+    {
+      "stage": "candidates (ALS order, then popular)",
+      "recall@10": 0.05278672164147301,
+      "ndcg@10": 0.1418671407619438,
+      "recall@50": 0.15051216709945325,
+      "ndcg@50": 0.13962791671873198,
+      "recall@600": 0.512990635606247,
+      "ndcg@600": 0.24977094837865008,
+      "n_users_evaluated": 6330,
+      "n_users_without_history": 11946,
+      "frac_positives_on_unknown_items": 0.12649541302113243,
+      "eval_ms_per_user": 1.953
+    },
+    {
+      "stage": "lightgbm re-ranked",
+      "recall@10": 0.07945033501797362,
+      "ndcg@10": 0.17712457780069565,
+      "recall@50": 0.20911905343936707,
+      "ndcg@50": 0.18446371081887056,
+      "n_users_evaluated": 6330,
+      "n_users_without_history": 11946,
+      "frac_positives_on_unknown_items": 0.12649541302113243,
+      "eval_ms_per_user": 7.883
+    }
+  ]
+}
