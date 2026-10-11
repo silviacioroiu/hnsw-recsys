@@ -1,6 +1,6 @@
 """Latency of GET /recommend/{user_id} under concurrent load.
 
-Start the service first (see the Makefile target `serve` or compose.yaml).
+Start the service first (see the Makefile target `serve`).
 
 Usage: python benchmarks/load_test.py [--url http://127.0.0.1:8000] --server "..."
 """

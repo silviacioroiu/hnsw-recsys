@@ -81,8 +81,8 @@ its graph faster.
 ### HTTP latency under load
 
 `GET /recommend/{user_id}?k=10`, 3,000 requests per level for randomly chosen
-known users, one uvicorn worker, load generator on the same machine. The
-service ran directly in WSL2, not in Docker.
+known users, one uvicorn worker running in WSL2, load generator on the same
+machine.
 
 | Concurrent requests | p50 | p95 | p99 | Requests per second | Errors |
 |---|---|---|---|---|---|
@@ -160,9 +160,6 @@ make m6-load        # HTTP latency under load
 `make m1` downloads `ml-25m.zip` (about 250 MB) and checks it against the MD5
 published by GroupLens. `make m6-load` records how the server was started; pass
 your own description with `python benchmarks/load_test.py --server "..."`.
-
-A `Dockerfile` and `compose.yaml` are included (`docker compose up -d --build
---wait`), but the image has not been built or tested yet.
 
 ## Environment for the numbers above
 

@@ -38,14 +38,14 @@ m5:
 m6-export: bindings
 	python -m recsys.serving
 
-# Runs the API without Docker, for development.
+# Runs the API on 127.0.0.1:8000.
 serve:
 	uvicorn recsys.service:app_from_env --factory --host 127.0.0.1 --port 8000
 
 # Measures latency against a running service: results/m6_latency.json
 # Start it first with `make serve`. SERVER is recorded with the result, so
 # describe how the service was really started, e.g.
-#   make m6-load SERVER="docker compose, 1 uvicorn worker"
+#   make m6-load SERVER="uvicorn, 4 workers"
 SERVER ?= uvicorn directly (make serve), 1 worker
 m6-load:
 	python benchmarks/load_test.py --server "$(SERVER)"
