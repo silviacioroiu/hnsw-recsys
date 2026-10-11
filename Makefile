@@ -42,10 +42,13 @@ m6-export: bindings
 serve:
 	uvicorn recsys.service:app_from_env --factory --host 127.0.0.1 --port 8000
 
-# Measures latency against the Docker service: results/m6_latency.json
-# Start it first with: docker compose up -d --build --wait
+# Measures latency against a running service: results/m6_latency.json
+# Start it first with `make serve`. SERVER is recorded with the result, so
+# describe how the service was really started, e.g.
+#   make m6-load SERVER="docker compose, 1 uvicorn worker"
+SERVER ?= uvicorn directly (make serve), 1 worker
 m6-load:
-	python benchmarks/load_test.py --server "docker compose, python:3.11-slim, 1 uvicorn worker"
+	python benchmarks/load_test.py --server "$(SERVER)"
 
 test:
 	python -m pytest -q

@@ -1,6 +1,9 @@
 # Dataset and derived splits are reproducible from scripts, never committed.
 data/
 
+# Personal CV and interview preparation notes.
+INTERVIEW_NOTES.md
+
 .venv/
 __pycache__/
 *.egg-info/
