@@ -17,6 +17,7 @@ target_compile_options(hnsw PRIVATE -Wall -Wextra -Wpedantic)
 
 option(HNSW_BUILD_PYTHON "Build the pybind11 module recsys._hnsw" OFF)
 if(HNSW_BUILD_PYTHON)
+  set(PYBIND11_FINDPYTHON ON)  # use CMake's FindPython, not the removed legacy module
   find_package(pybind11 CONFIG REQUIRED)
   pybind11_add_module(_hnsw python/bindings.cpp)
   target_link_libraries(_hnsw PRIVATE hnsw)

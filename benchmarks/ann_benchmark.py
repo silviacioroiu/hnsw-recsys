@@ -22,21 +22,28 @@ from recsys.runinfo import collect_runinfo, set_seed
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
+from matplotlib import ticker  # noqa: E402
 
 K = 10
 WARMUP = 50
+REPEATS = 3
 
 
 def measure(search, queries: np.ndarray, truth: np.ndarray) -> dict:
     """Recall against `truth` and per-query latency of `search(query) -> ids`."""
     for query in queries[:WARMUP]:
         search(query)
-    latencies_ms, hits = [], 0
-    for query, exact in zip(queries, truth):
-        start = time.perf_counter_ns()
-        ids = search(query)
-        latencies_ms.append((time.perf_counter_ns() - start) / 1e6)
-        hits += len(set(np.asarray(ids).tolist()) & set(exact.tolist()))
+    # Each query is timed REPEATS times and its fastest run is kept: at tens of
+    # microseconds, one run is dominated by scheduler and cache noise.
+    latencies_ms = np.full(len(queries), np.inf)
+    hits = 0
+    for repeat in range(REPEATS):
+        for i, (query, exact) in enumerate(zip(queries, truth)):
+            start = time.perf_counter_ns()
+            ids = search(query)
+            latencies_ms[i] = min(latencies_ms[i], (time.perf_counter_ns() - start) / 1e6)
+            if repeat == 0:
+                hits += len(set(np.asarray(ids).tolist()) & set(exact.tolist()))
     return {
         "recall@10": hits / (len(queries) * K),
         "latency_ms_mean": float(np.mean(latencies_ms)),
@@ -50,8 +57,9 @@ def plot(rows: list[dict], Ms: list[int], out_file: Path) -> None:
     series = {"hnsw (this repo)": "#2a78d6", "faiss hnsw": "#eb6834"}
     exact = next(r for r in rows if r["method"] == "faiss flat (exact)")
 
-    fig, axes = plt.subplots(1, len(Ms), figsize=(4.2 * len(Ms), 3.9), sharey=True,
-                             facecolor=surface)
+    # One panel per M with shared axes, so the panels can be compared directly.
+    fig, axes = plt.subplots(1, len(Ms), figsize=(4.2 * len(Ms), 4.1), sharex=True,
+                             sharey=True, facecolor=surface)
     for ax, M in zip(axes, Ms):
         ax.set_facecolor(surface)
         for method, color in series.items():
@@ -61,9 +69,12 @@ def plot(rows: list[dict], Ms: list[int], out_file: Path) -> None:
                     color=color, linewidth=2, marker="o", markersize=5, label=method)
         # Exact search is the reference: recall 1.0 at this latency.
         ax.axvline(exact["latency_ms_p50"], color=muted, linewidth=1, linestyle="--")
-        ax.text(exact["latency_ms_p50"], 0.02, " exact search", color=muted, fontsize=8,
-                rotation=90, va="bottom", ha="right", transform=ax.get_xaxis_transform())
+        ax.text(exact["latency_ms_p50"], 0.5, "exact search (FAISS flat) ", color=muted,
+                fontsize=8, rotation=90, va="center", ha="right",
+                transform=ax.get_xaxis_transform())
         ax.set_xscale("log")
+        ax.xaxis.set_major_formatter(ticker.FormatStrFormatter("%g"))
+        ax.xaxis.set_minor_formatter(ticker.NullFormatter())
         ax.set_title(f"M = {M}", color=ink, fontsize=11, loc="left")
         ax.set_xlabel("median latency per query (ms, log scale)", color=ink, fontsize=9)
         ax.grid(True, color=grid, linewidth=0.8)
@@ -71,7 +82,9 @@ def plot(rows: list[dict], Ms: list[int], out_file: Path) -> None:
         for spine in ax.spines.values():
             spine.set_visible(False)
     axes[0].set_ylabel("recall@10 against exact search", color=ink, fontsize=9)
-    axes[0].legend(frameon=False, fontsize=9, labelcolor=ink, loc="lower right")
+    handles, labels = axes[0].get_legend_handles_labels()
+    fig.legend(handles, labels, frameon=False, fontsize=9, labelcolor=ink, ncols=2,
+               loc="upper right", bbox_to_anchor=(0.99, 1.0))
     fig.suptitle("Recall versus latency; each point is one ef, increasing left to right",
                  color=ink, fontsize=11, x=0.01, ha="left")
     fig.tight_layout()
@@ -100,7 +113,8 @@ def main() -> None:
     params = {"k": K, "n_items": n_items, "dim": dim, "n_queries": args.queries,
               "metric": "inner product", "M": args.M, "ef": args.ef,
               "ef_construction": args.ef_construction, "threads": 1, "warmup_queries": WARMUP,
-              "timing": "one query per call from Python, perf_counter_ns"}
+              "timing": f"one query per call from Python, perf_counter_ns, "
+                        f"fastest of {REPEATS} runs per query"}
     runinfo = collect_runinfo(params, args.seed, packages=("faiss-cpu", "pybind11"))
 
     # Everything runs on one thread so the methods are compared like for like.
