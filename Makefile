@@ -1,4 +1,4 @@
-.PHONY: setup data split m1 m2 test
+.PHONY: setup data split m1 m2 test cpp-test
 
 setup:
 	python -m pip install -e ".[dev]"
@@ -20,3 +20,9 @@ m2:
 
 test:
 	python -m pytest -q
+
+# Builds the C++ index and runs its GoogleTest suite.
+cpp-test:
+	cmake -S cpp -B build/cpp
+	cmake --build build/cpp -j
+	./build/cpp/hnsw_tests --gtest_brief=1
