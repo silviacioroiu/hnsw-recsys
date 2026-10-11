@@ -15,6 +15,16 @@ add_library(hnsw src/hnsw.cpp)
 target_include_directories(hnsw PUBLIC include)
 target_compile_options(hnsw PRIVATE -Wall -Wextra -Wpedantic)
 
+option(HNSW_BUILD_PYTHON "Build the pybind11 module recsys._hnsw" OFF)
+if(HNSW_BUILD_PYTHON)
+  find_package(pybind11 CONFIG REQUIRED)
+  pybind11_add_module(_hnsw python/bindings.cpp)
+  target_link_libraries(_hnsw PRIVATE hnsw)
+  # Placed inside the Python package so `import recsys._hnsw` just works.
+  set_target_properties(_hnsw PROPERTIES
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../src/recsys)
+endif()
+
 # Give extracted files the extraction time, so a changed URL triggers a rebuild.
 if(POLICY CMP0135)
   cmake_policy(SET CMP0135 NEW)

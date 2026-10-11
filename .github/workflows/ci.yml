@@ -13,6 +13,7 @@ jobs:
         with:
           python-version: "3.11"
       - run: python -m pip install -e ".[dev]"
+      - run: make bindings
       - run: python -m pytest -q
 
   cpp:

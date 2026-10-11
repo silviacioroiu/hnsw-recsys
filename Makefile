@@ -1,7 +1,12 @@
-.PHONY: setup data split m1 m2 test cpp-test
+.PHONY: setup bindings data split m1 m2 m4 test cpp-test
 
 setup:
-	python -m pip install -e ".[dev]"
+	python -m pip install -e ".[dev,bench]"
+
+# Compiles the C++ index into src/recsys/_hnsw*.so
+bindings:
+	cmake -S cpp -B build/cpp -DHNSW_BUILD_PYTHON=ON -Dpybind11_DIR=$$(python -m pybind11 --cmakedir)
+	cmake --build build/cpp -j --target _hnsw
 
 # Downloads ml-25m.zip (~250 MB), checks it against the published MD5.
 data:
@@ -17,6 +22,12 @@ m1: data split
 # Reproduces the M2 results: results/m2_als.json (needs the split from m1)
 m2:
 	python -m recsys.als
+
+# Reproduces the M4 results: results/m4_retrieval.json, m4_ann_benchmark.json
+# and the recall-vs-latency plot (needs the embeddings from m2)
+m4: bindings
+	python -m recsys.ann
+	python benchmarks/ann_benchmark.py
 
 test:
 	python -m pytest -q

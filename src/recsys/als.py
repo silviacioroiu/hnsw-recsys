@@ -22,6 +22,9 @@ from recsys.popularity import PopularityRecommender
 from recsys.runinfo import collect_runinfo, set_seed
 
 
+_ARRAYS = ("user_factors", "item_factors", "user_ids", "item_ids")
+
+
 class ALSRecommender:
     """User and item embeddings; score(user, item) = dot product.
 
@@ -61,6 +64,21 @@ class ALSRecommender:
         self.user_factors = np.asarray(model.user_factors)
         self.item_factors = np.asarray(model.item_factors)
         return self
+
+    def save(self, directory: Path) -> None:
+        directory.mkdir(parents=True, exist_ok=True)
+        for name in _ARRAYS:
+            np.save(directory / f"{name}.npy", getattr(self, name))
+
+    @classmethod
+    def load(cls, directory: Path, fallback=None) -> "ALSRecommender":
+        """Embeddings saved by `save`. The training parameters are not restored."""
+        model = cls(fallback=fallback)
+        model.params = None
+        for name in _ARRAYS:
+            setattr(model, name, np.load(directory / f"{name}.npy"))
+        model.user_row = {int(user): row for row, user in enumerate(model.user_ids)}
+        return model
 
     def recommend(self, user_id: int, k: int, exclude: set[int]) -> list[int]:
         row = self.user_row.get(user_id)
@@ -130,9 +148,7 @@ def main() -> None:
     best_config = {name: best[name] for name in ("factors", "regularization", "alpha")}
     model, test_row = fit_and_score(best_config, pd.concat([train, val]), test)
 
-    args.artifacts.mkdir(parents=True, exist_ok=True)
-    for name in ("user_factors", "item_factors", "user_ids", "item_ids"):
-        np.save(args.artifacts / f"{name}.npy", getattr(model, name))
+    model.save(args.artifacts)
 
     args.out.mkdir(parents=True, exist_ok=True)
     out_file = args.out / "m2_als.json"

@@ -51,6 +51,14 @@ def test_same_seed_gives_same_embeddings(two_taste_groups):
     np.testing.assert_allclose(first.item_factors, second.item_factors)
 
 
+def test_save_and_load_round_trip(two_taste_groups, tmp_path):
+    model = _fit(two_taste_groups)
+    model.save(tmp_path)
+    loaded = ALSRecommender.load(tmp_path)
+    for user in (0, 25):
+        assert loaded.recommend(user, 5, set()) == model.recommend(user, 5, set())
+
+
 def test_user_without_likes_gets_the_fallback(two_taste_groups):
     # User 99 rated one film badly: history, but nothing to learn a taste from.
     data = pd.concat([two_taste_groups, pd.DataFrame(
