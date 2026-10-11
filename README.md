@@ -176,7 +176,9 @@ your own description with `python benchmarks/load_test.py --server "..."`.
 | Ranker | LambdaRank, learning rate 0.05, 63 leaves, early stopping on 20% of validation users, 102 trees |
 
 Each file in `results/` records the exact parameters and the git commit of the
-run that produced it.
+run that produced it. Those hashes predate a rewrite of the commit messages,
+which changed every hash and no file; each one corresponds to the commit with
+the same message in the current history.
 
 ## References
 
