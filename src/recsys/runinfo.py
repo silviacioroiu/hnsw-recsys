@@ -43,7 +43,9 @@ def collect_runinfo(params: dict, seed: int, packages: tuple[str, ...] = ()) -> 
         "params": params,
         "git_commit": _git("rev-parse", "HEAD"),
         # Uncommitted changes mean the commit alone does not reproduce the run.
-        "git_dirty": bool(_git("status", "--porcelain")),
+        # results/ is excluded: a run rewrites its own output file, which
+        # would otherwise mark every later run in the same session as dirty.
+        "git_dirty": bool(_git("status", "--porcelain", "--", ".", ":(exclude)results")),
         "hardware": {
             "machine": platform.machine(),
             "cpu": _read_proc("/proc/cpuinfo", "model name") or platform.processor() or None,
