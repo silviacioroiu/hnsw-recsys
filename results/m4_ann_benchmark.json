@@ -1,6 +1,6 @@
 {
   "runinfo": {
-    "timestamp_utc": "2026-10-11T16:11:18+00:00",
+    "timestamp_utc": "2026-10-11T16:14:11+00:00",
     "seed": 0,
     "params": {
       "k": 10,
@@ -26,7 +26,7 @@
       "warmup_queries": 50,
       "timing": "one query per call from Python, perf_counter_ns, fastest of 3 runs per query"
     },
-    "git_commit": "cebd0bb06e90fc2a910611e8e2ba14bca436d2a8",
+    "git_commit": "7dc3ed98036e1da1033c93c1b09e182dba2d4454",
     "git_dirty": false,
     "hardware": {
       "machine": "aarch64",
@@ -48,376 +48,556 @@
     {
       "method": "numpy (exact)",
       "recall@10": 1.0,
-      "latency_ms_mean": 0.40318573700000004,
-      "latency_ms_p50": 0.4016295,
-      "latency_ms_p95": 0.4977431
+      "latency_ms_mean": 0.404464539,
+      "latency_ms_p50": 0.40263400000000005,
+      "latency_ms_p95": 0.5025780000000001
     },
     {
       "method": "faiss flat (exact)",
       "recall@10": 1.0,
-      "latency_ms_mean": 0.1687356,
-      "latency_ms_p50": 0.163326,
-      "latency_ms_p95": 0.20018719999999998
+      "latency_ms_mean": 0.16601622800000002,
+      "latency_ms_p50": 0.160286,
+      "latency_ms_p95": 0.20321605
     },
     {
       "method": "hnsw (this repo)",
       "M": 8,
       "ef": 10,
-      "build_seconds": 3.63,
+      "build_seconds": 3.62,
       "recall@10": 0.911,
-      "latency_ms_mean": 0.008775959,
-      "latency_ms_p50": 0.00858,
-      "latency_ms_p95": 0.011031049999999999
+      "latency_ms_mean": 0.011158697,
+      "latency_ms_p50": 0.0108,
+      "latency_ms_p95": 0.014209999999999992
+    },
+    {
+      "method": "hnsw (this repo, heuristic)",
+      "M": 8,
+      "ef": 10,
+      "build_seconds": 4.76,
+      "recall@10": 0.8563,
+      "latency_ms_mean": 0.011963396999999999,
+      "latency_ms_p50": 0.0115,
+      "latency_ms_p95": 0.015504999999999994
     },
     {
       "method": "faiss hnsw",
       "M": 8,
       "ef": 10,
-      "build_seconds": 2.55,
+      "build_seconds": 2.64,
       "recall@10": 0.8428,
-      "latency_ms_mean": 0.008183098,
-      "latency_ms_p50": 0.007967,
-      "latency_ms_p95": 0.01011205
+      "latency_ms_mean": 0.0077244969999999994,
+      "latency_ms_p50": 0.0075,
+      "latency_ms_p95": 0.0094
     },
     {
       "method": "hnsw (this repo)",
       "M": 8,
       "ef": 20,
-      "build_seconds": 3.63,
+      "build_seconds": 3.62,
       "recall@10": 0.9692,
-      "latency_ms_mean": 0.012615739,
-      "latency_ms_p50": 0.01236,
-      "latency_ms_p95": 0.015935
+      "latency_ms_mean": 0.012268298,
+      "latency_ms_p50": 0.012,
+      "latency_ms_p95": 0.015404999999999995
+    },
+    {
+      "method": "hnsw (this repo, heuristic)",
+      "M": 8,
+      "ef": 20,
+      "build_seconds": 4.76,
+      "recall@10": 0.9431,
+      "latency_ms_mean": 0.016307797000000002,
+      "latency_ms_p50": 0.0159,
+      "latency_ms_p95": 0.0199
     },
     {
       "method": "faiss hnsw",
       "M": 8,
       "ef": 20,
-      "build_seconds": 2.55,
+      "build_seconds": 2.64,
       "recall@10": 0.9411,
-      "latency_ms_mean": 0.015335483,
-      "latency_ms_p50": 0.015321,
-      "latency_ms_p95": 0.020128099999999993
+      "latency_ms_mean": 0.010875998,
+      "latency_ms_p50": 0.0106,
+      "latency_ms_p95": 0.0132
     },
     {
       "method": "hnsw (this repo)",
       "M": 8,
       "ef": 50,
-      "build_seconds": 3.63,
+      "build_seconds": 3.62,
       "recall@10": 0.9961,
-      "latency_ms_mean": 0.023043621,
-      "latency_ms_p50": 0.022778,
-      "latency_ms_p95": 0.027579
+      "latency_ms_mean": 0.024797094999999998,
+      "latency_ms_p50": 0.024,
+      "latency_ms_p95": 0.0322
+    },
+    {
+      "method": "hnsw (this repo, heuristic)",
+      "M": 8,
+      "ef": 50,
+      "build_seconds": 4.76,
+      "recall@10": 0.9906,
+      "latency_ms_mean": 0.032203793,
+      "latency_ms_p50": 0.0319,
+      "latency_ms_p95": 0.0359
     },
     {
       "method": "faiss hnsw",
       "M": 8,
       "ef": 50,
-      "build_seconds": 2.55,
+      "build_seconds": 2.64,
       "recall@10": 0.9895,
-      "latency_ms_mean": 0.021163504,
-      "latency_ms_p50": 0.020838,
-      "latency_ms_p95": 0.024316099999999993
+      "latency_ms_mean": 0.020592594,
+      "latency_ms_p50": 0.0203,
+      "latency_ms_p95": 0.0235
     },
     {
       "method": "hnsw (this repo)",
       "M": 8,
       "ef": 100,
-      "build_seconds": 3.63,
+      "build_seconds": 3.62,
       "recall@10": 0.999,
-      "latency_ms_mean": 0.040018333999999996,
-      "latency_ms_p50": 0.039429,
-      "latency_ms_p95": 0.0468901
+      "latency_ms_mean": 0.038955691,
+      "latency_ms_p50": 0.0385,
+      "latency_ms_p95": 0.04530999999999999
+    },
+    {
+      "method": "hnsw (this repo, heuristic)",
+      "M": 8,
+      "ef": 100,
+      "build_seconds": 4.76,
+      "recall@10": 0.9983,
+      "latency_ms_mean": 0.057583990999999994,
+      "latency_ms_p50": 0.0577,
+      "latency_ms_p95": 0.0628
     },
     {
       "method": "faiss hnsw",
       "M": 8,
       "ef": 100,
-      "build_seconds": 2.55,
+      "build_seconds": 2.64,
       "recall@10": 0.9982,
-      "latency_ms_mean": 0.040912656,
-      "latency_ms_p50": 0.040041,
-      "latency_ms_p95": 0.04853019999999999
+      "latency_ms_mean": 0.039139492000000005,
+      "latency_ms_p50": 0.0389,
+      "latency_ms_p95": 0.042405
     },
     {
       "method": "hnsw (this repo)",
       "M": 8,
       "ef": 200,
-      "build_seconds": 3.63,
+      "build_seconds": 3.62,
       "recall@10": 0.9998,
-      "latency_ms_mean": 0.073836564,
-      "latency_ms_p50": 0.073137,
-      "latency_ms_p95": 0.08417919999999998
+      "latency_ms_mean": 0.072828385,
+      "latency_ms_p50": 0.0719,
+      "latency_ms_p95": 0.08401
+    },
+    {
+      "method": "hnsw (this repo, heuristic)",
+      "M": 8,
+      "ef": 200,
+      "build_seconds": 4.76,
+      "recall@10": 0.9995,
+      "latency_ms_mean": 0.10639677799999998,
+      "latency_ms_p50": 0.1067,
+      "latency_ms_p95": 0.1166
     },
     {
       "method": "faiss hnsw",
       "M": 8,
       "ef": 200,
-      "build_seconds": 2.55,
+      "build_seconds": 2.64,
       "recall@10": 0.9995,
-      "latency_ms_mean": 0.08900638900000002,
-      "latency_ms_p50": 0.08856,
-      "latency_ms_p95": 0.09521114999999998
+      "latency_ms_mean": 0.08813688500000001,
+      "latency_ms_p50": 0.0866,
+      "latency_ms_p95": 0.099905
     },
     {
       "method": "hnsw (this repo)",
       "M": 8,
       "ef": 500,
-      "build_seconds": 3.63,
+      "build_seconds": 3.62,
       "recall@10": 1.0,
-      "latency_ms_mean": 0.179967724,
-      "latency_ms_p50": 0.1778365,
-      "latency_ms_p95": 0.206437
+      "latency_ms_mean": 0.177185563,
+      "latency_ms_p50": 0.17475000000000002,
+      "latency_ms_p95": 0.20683999999999997
+    },
+    {
+      "method": "hnsw (this repo, heuristic)",
+      "M": 8,
+      "ef": 500,
+      "build_seconds": 4.76,
+      "recall@10": 1.0,
+      "latency_ms_mean": 0.24174547999999998,
+      "latency_ms_p50": 0.2411,
+      "latency_ms_p95": 0.26629335
     },
     {
       "method": "faiss hnsw",
       "M": 8,
       "ef": 500,
-      "build_seconds": 2.55,
+      "build_seconds": 2.64,
       "recall@10": 1.0,
-      "latency_ms_mean": 0.31812538600000007,
-      "latency_ms_p50": 0.314916,
-      "latency_ms_p95": 0.3339311
+      "latency_ms_mean": 0.32122657600000004,
+      "latency_ms_p50": 0.3149915,
+      "latency_ms_p95": 0.383053
     },
     {
       "method": "hnsw (this repo)",
       "M": 16,
       "ef": 10,
-      "build_seconds": 4.41,
+      "build_seconds": 4.34,
       "recall@10": 0.9715,
-      "latency_ms_mean": 0.011013993,
-      "latency_ms_p50": 0.010725,
-      "latency_ms_p95": 0.013999099999999995
+      "latency_ms_mean": 0.010690476,
+      "latency_ms_p50": 0.010375,
+      "latency_ms_p95": 0.013534049999999995
+    },
+    {
+      "method": "hnsw (this repo, heuristic)",
+      "M": 16,
+      "ef": 10,
+      "build_seconds": 5.75,
+      "recall@10": 0.8733,
+      "latency_ms_mean": 0.016919702000000002,
+      "latency_ms_p50": 0.016478,
+      "latency_ms_p95": 0.02136
     },
     {
       "method": "faiss hnsw",
       "M": 16,
       "ef": 10,
-      "build_seconds": 3.04,
+      "build_seconds": 2.92,
       "recall@10": 0.874,
-      "latency_ms_mean": 0.009593369000000001,
-      "latency_ms_p50": 0.009397,
-      "latency_ms_p95": 0.01174605
+      "latency_ms_mean": 0.009376692,
+      "latency_ms_p50": 0.009155,
+      "latency_ms_p95": 0.011392
     },
     {
       "method": "hnsw (this repo)",
       "M": 16,
       "ef": 20,
-      "build_seconds": 4.41,
+      "build_seconds": 4.34,
       "recall@10": 0.9917,
-      "latency_ms_mean": 0.016304571999999996,
-      "latency_ms_p50": 0.015628,
-      "latency_ms_p95": 0.021553
+      "latency_ms_mean": 0.014780467000000002,
+      "latency_ms_p50": 0.014545,
+      "latency_ms_p95": 0.018208
+    },
+    {
+      "method": "hnsw (this repo, heuristic)",
+      "M": 16,
+      "ef": 20,
+      "build_seconds": 5.75,
+      "recall@10": 0.9575,
+      "latency_ms_mean": 0.02740817,
+      "latency_ms_p50": 0.026243,
+      "latency_ms_p95": 0.034893099999999996
     },
     {
       "method": "faiss hnsw",
       "M": 16,
       "ef": 20,
-      "build_seconds": 3.04,
+      "build_seconds": 2.92,
       "recall@10": 0.9597,
-      "latency_ms_mean": 0.013386384,
-      "latency_ms_p50": 0.013176,
-      "latency_ms_p95": 0.015526
+      "latency_ms_mean": 0.013809826,
+      "latency_ms_p50": 0.013528,
+      "latency_ms_p95": 0.016280049999999997
     },
     {
       "method": "hnsw (this repo)",
       "M": 16,
       "ef": 50,
-      "build_seconds": 4.41,
+      "build_seconds": 4.34,
       "recall@10": 0.9989,
-      "latency_ms_mean": 0.027614069,
-      "latency_ms_p50": 0.02717,
-      "latency_ms_p95": 0.03432609999999999
+      "latency_ms_mean": 0.026804991,
+      "latency_ms_p50": 0.026548,
+      "latency_ms_p95": 0.03276314999999999
+    },
+    {
+      "method": "hnsw (this repo, heuristic)",
+      "M": 16,
+      "ef": 50,
+      "build_seconds": 5.75,
+      "recall@10": 0.993,
+      "latency_ms_mean": 0.049924067,
+      "latency_ms_p50": 0.050044,
+      "latency_ms_p95": 0.055237049999999996
     },
     {
       "method": "faiss hnsw",
       "M": 16,
       "ef": 50,
-      "build_seconds": 3.04,
+      "build_seconds": 2.92,
       "recall@10": 0.9958,
-      "latency_ms_mean": 0.026738381999999998,
-      "latency_ms_p50": 0.02666,
-      "latency_ms_p95": 0.029213
+      "latency_ms_mean": 0.026947182,
+      "latency_ms_p50": 0.026853,
+      "latency_ms_p95": 0.029498
     },
     {
       "method": "hnsw (this repo)",
       "M": 16,
       "ef": 100,
-      "build_seconds": 4.41,
+      "build_seconds": 4.34,
       "recall@10": 1.0,
-      "latency_ms_mean": 0.047499234,
-      "latency_ms_p50": 0.04617,
-      "latency_ms_p95": 0.05873305
+      "latency_ms_mean": 0.046005976000000004,
+      "latency_ms_p50": 0.045264,
+      "latency_ms_p95": 0.05513005
+    },
+    {
+      "method": "hnsw (this repo, heuristic)",
+      "M": 16,
+      "ef": 100,
+      "build_seconds": 5.75,
+      "recall@10": 0.9992,
+      "latency_ms_mean": 0.09503811799999999,
+      "latency_ms_p50": 0.091774,
+      "latency_ms_p95": 0.12621
     },
     {
       "method": "faiss hnsw",
       "M": 16,
       "ef": 100,
-      "build_seconds": 3.04,
+      "build_seconds": 2.92,
       "recall@10": 0.9995,
-      "latency_ms_mean": 0.054849147,
-      "latency_ms_p50": 0.052075,
-      "latency_ms_p95": 0.06637509999999999
+      "latency_ms_mean": 0.050101692,
+      "latency_ms_p50": 0.0504,
+      "latency_ms_p95": 0.0533
     },
     {
       "method": "hnsw (this repo)",
       "M": 16,
       "ef": 200,
-      "build_seconds": 4.41,
+      "build_seconds": 4.34,
       "recall@10": 1.0,
-      "latency_ms_mean": 0.08469206399999998,
-      "latency_ms_p50": 0.083931,
-      "latency_ms_p95": 0.0981301
+      "latency_ms_mean": 0.08218867999999999,
+      "latency_ms_p50": 0.0817,
+      "latency_ms_p95": 0.09461499999999999
     },
     {
-      "method": "faiss hnsw",
+      "method": "hnsw (this repo, heuristic)",
       "M": 16,
       "ef": 200,
-      "build_seconds": 3.04,
-      "recall@10": 1.0,
-      "latency_ms_mean": 0.114998319,
-      "latency_ms_p50": 0.1121645,
-      "latency_ms_p95": 0.13539905
-    },
-    {
-      "method": "hnsw (this repo)",
-      "M": 16,
-      "ef": 500,
-      "build_seconds": 4.41,
-      "recall@10": 1.0,
-      "latency_ms_mean": 0.206420999,
-      "latency_ms_p50": 0.202682,
-      "latency_ms_p95": 0.25242335
-    },
-    {
-      "method": "faiss hnsw",
-      "M": 16,
-      "ef": 500,
-      "build_seconds": 3.04,
-      "recall@10": 1.0,
-      "latency_ms_mean": 0.375236058,
-      "latency_ms_p50": 0.360233,
-      "latency_ms_p95": 0.47003375
-    },
-    {
-      "method": "hnsw (this repo)",
-      "M": 32,
-      "ef": 10,
-      "build_seconds": 6.49,
-      "recall@10": 0.9929,
-      "latency_ms_mean": 0.013934054999999999,
-      "latency_ms_p50": 0.013721,
-      "latency_ms_p95": 0.016793
-    },
-    {
-      "method": "faiss hnsw",
-      "M": 32,
-      "ef": 10,
-      "build_seconds": 3.52,
-      "recall@10": 0.8873,
-      "latency_ms_mean": 0.012911994,
-      "latency_ms_p50": 0.012697,
-      "latency_ms_p95": 0.015769
-    },
-    {
-      "method": "hnsw (this repo)",
-      "M": 32,
-      "ef": 20,
-      "build_seconds": 6.49,
-      "recall@10": 0.9981,
-      "latency_ms_mean": 0.019519102,
-      "latency_ms_p50": 0.019149,
-      "latency_ms_p95": 0.023859
-    },
-    {
-      "method": "faiss hnsw",
-      "M": 32,
-      "ef": 20,
-      "build_seconds": 3.52,
-      "recall@10": 0.9707,
-      "latency_ms_mean": 0.018990145000000003,
-      "latency_ms_p50": 0.018841,
-      "latency_ms_p95": 0.022323
-    },
-    {
-      "method": "hnsw (this repo)",
-      "M": 32,
-      "ef": 50,
-      "build_seconds": 6.49,
-      "recall@10": 1.0,
-      "latency_ms_mean": 0.033885995,
-      "latency_ms_p50": 0.033586,
-      "latency_ms_p95": 0.041471
-    },
-    {
-      "method": "faiss hnsw",
-      "M": 32,
-      "ef": 50,
-      "build_seconds": 3.52,
-      "recall@10": 0.9976,
-      "latency_ms_mean": 0.035716768,
-      "latency_ms_p50": 0.035737,
-      "latency_ms_p95": 0.038911
-    },
-    {
-      "method": "hnsw (this repo)",
-      "M": 32,
-      "ef": 100,
-      "build_seconds": 6.49,
-      "recall@10": 1.0,
-      "latency_ms_mean": 0.055865967999999995,
-      "latency_ms_p50": 0.0549875,
-      "latency_ms_p95": 0.068197
-    },
-    {
-      "method": "faiss hnsw",
-      "M": 32,
-      "ef": 100,
-      "build_seconds": 3.52,
+      "build_seconds": 5.75,
       "recall@10": 0.9996,
-      "latency_ms_mean": 0.066862189,
-      "latency_ms_p50": 0.066968,
-      "latency_ms_p95": 0.07240105
-    },
-    {
-      "method": "hnsw (this repo)",
-      "M": 32,
-      "ef": 200,
-      "build_seconds": 6.49,
-      "recall@10": 1.0,
-      "latency_ms_mean": 0.10517569900000001,
-      "latency_ms_p50": 0.10203999999999999,
-      "latency_ms_p95": 0.13365554999999998
+      "latency_ms_mean": 0.169565856,
+      "latency_ms_p50": 0.1674985,
+      "latency_ms_p95": 0.21222
     },
     {
       "method": "faiss hnsw",
-      "M": 32,
+      "M": 16,
       "ef": 200,
-      "build_seconds": 3.52,
+      "build_seconds": 2.92,
+      "recall@10": 1.0,
+      "latency_ms_mean": 0.111300401,
+      "latency_ms_p50": 0.111874,
+      "latency_ms_p95": 0.1190032
+    },
+    {
+      "method": "hnsw (this repo)",
+      "M": 16,
+      "ef": 500,
+      "build_seconds": 4.34,
+      "recall@10": 1.0,
+      "latency_ms_mean": 0.21347258500000002,
+      "latency_ms_p50": 0.207145,
+      "latency_ms_p95": 0.27215870000000003
+    },
+    {
+      "method": "hnsw (this repo, heuristic)",
+      "M": 16,
+      "ef": 500,
+      "build_seconds": 5.75,
       "recall@10": 0.9999,
-      "latency_ms_mean": 0.13770666499999998,
-      "latency_ms_p50": 0.137725,
-      "latency_ms_p95": 0.1494041
+      "latency_ms_mean": 0.363486491,
+      "latency_ms_p50": 0.363276,
+      "latency_ms_p95": 0.43458649999999993
+    },
+    {
+      "method": "faiss hnsw",
+      "M": 16,
+      "ef": 500,
+      "build_seconds": 2.92,
+      "recall@10": 1.0,
+      "latency_ms_mean": 0.37566738899999996,
+      "latency_ms_p50": 0.371447,
+      "latency_ms_p95": 0.4131282499999999
+    },
+    {
+      "method": "hnsw (this repo)",
+      "M": 32,
+      "ef": 10,
+      "build_seconds": 6.7,
+      "recall@10": 0.9929,
+      "latency_ms_mean": 0.014801060999999999,
+      "latency_ms_p50": 0.014255,
+      "latency_ms_p95": 0.01904
+    },
+    {
+      "method": "hnsw (this repo, heuristic)",
+      "M": 32,
+      "ef": 10,
+      "build_seconds": 7.83,
+      "recall@10": 0.8887,
+      "latency_ms_mean": 0.023811305,
+      "latency_ms_p50": 0.023316,
+      "latency_ms_p95": 0.030143099999999996
+    },
+    {
+      "method": "faiss hnsw",
+      "M": 32,
+      "ef": 10,
+      "build_seconds": 3.71,
+      "recall@10": 0.8873,
+      "latency_ms_mean": 0.013183273,
+      "latency_ms_p50": 0.012829,
+      "latency_ms_p95": 0.016194049999999995
+    },
+    {
+      "method": "hnsw (this repo)",
+      "M": 32,
+      "ef": 20,
+      "build_seconds": 6.7,
+      "recall@10": 0.9981,
+      "latency_ms_mean": 0.019585363999999997,
+      "latency_ms_p50": 0.019142,
+      "latency_ms_p95": 0.024543099999999995
+    },
+    {
+      "method": "hnsw (this repo, heuristic)",
+      "M": 32,
+      "ef": 20,
+      "build_seconds": 7.83,
+      "recall@10": 0.9671,
+      "latency_ms_mean": 0.03815715,
+      "latency_ms_p50": 0.037571,
+      "latency_ms_p95": 0.046837
+    },
+    {
+      "method": "faiss hnsw",
+      "M": 32,
+      "ef": 20,
+      "build_seconds": 3.71,
+      "recall@10": 0.9707,
+      "latency_ms_mean": 0.018110116000000002,
+      "latency_ms_p50": 0.0180215,
+      "latency_ms_p95": 0.020572099999999992
+    },
+    {
+      "method": "hnsw (this repo)",
+      "M": 32,
+      "ef": 50,
+      "build_seconds": 6.7,
+      "recall@10": 1.0,
+      "latency_ms_mean": 0.033803814,
+      "latency_ms_p50": 0.033397,
+      "latency_ms_p95": 0.04134819999999999
+    },
+    {
+      "method": "hnsw (this repo, heuristic)",
+      "M": 32,
+      "ef": 50,
+      "build_seconds": 7.83,
+      "recall@10": 0.996,
+      "latency_ms_mean": 0.08213827,
+      "latency_ms_p50": 0.080029,
+      "latency_ms_p95": 0.10427214999999998
+    },
+    {
+      "method": "faiss hnsw",
+      "M": 32,
+      "ef": 50,
+      "build_seconds": 3.71,
+      "recall@10": 0.9976,
+      "latency_ms_mean": 0.036870165999999996,
+      "latency_ms_p50": 0.036756,
+      "latency_ms_p95": 0.040422
+    },
+    {
+      "method": "hnsw (this repo)",
+      "M": 32,
+      "ef": 100,
+      "build_seconds": 6.7,
+      "recall@10": 1.0,
+      "latency_ms_mean": 0.054184129,
+      "latency_ms_p50": 0.0534,
+      "latency_ms_p95": 0.0651
+    },
+    {
+      "method": "hnsw (this repo, heuristic)",
+      "M": 32,
+      "ef": 100,
+      "build_seconds": 7.83,
+      "recall@10": 0.9995,
+      "latency_ms_mean": 0.134780276,
+      "latency_ms_p50": 0.1356,
+      "latency_ms_p95": 0.1594
+    },
+    {
+      "method": "faiss hnsw",
+      "M": 32,
+      "ef": 100,
+      "build_seconds": 3.71,
+      "recall@10": 0.9996,
+      "latency_ms_mean": 0.067298186,
+      "latency_ms_p50": 0.0675,
+      "latency_ms_p95": 0.07269905
+    },
+    {
+      "method": "hnsw (this repo)",
+      "M": 32,
+      "ef": 200,
+      "build_seconds": 6.7,
+      "recall@10": 1.0,
+      "latency_ms_mean": 0.09837085500000001,
+      "latency_ms_p50": 0.0971285,
+      "latency_ms_p95": 0.11671519999999996
+    },
+    {
+      "method": "hnsw (this repo, heuristic)",
+      "M": 32,
+      "ef": 200,
+      "build_seconds": 7.83,
+      "recall@10": 0.9998,
+      "latency_ms_mean": 0.23755768600000002,
+      "latency_ms_p50": 0.2387265,
+      "latency_ms_p95": 0.28181914999999996
+    },
+    {
+      "method": "faiss hnsw",
+      "M": 32,
+      "ef": 200,
+      "build_seconds": 3.71,
+      "recall@10": 0.9999,
+      "latency_ms_mean": 0.141938955,
+      "latency_ms_p50": 0.141447,
+      "latency_ms_p95": 0.16242009999999998
     },
     {
       "method": "hnsw (this repo)",
       "M": 32,
       "ef": 500,
-      "build_seconds": 6.49,
+      "build_seconds": 6.7,
       "recall@10": 1.0,
-      "latency_ms_mean": 0.22982167900000003,
-      "latency_ms_p50": 0.227631,
-      "latency_ms_p95": 0.2669571
+      "latency_ms_mean": 0.229071844,
+      "latency_ms_p50": 0.227069,
+      "latency_ms_p95": 0.2673371
+    },
+    {
+      "method": "hnsw (this repo, heuristic)",
+      "M": 32,
+      "ef": 500,
+      "build_seconds": 7.83,
+      "recall@10": 1.0,
+      "latency_ms_mean": 0.49007113999999996,
+      "latency_ms_p50": 0.484437,
+      "latency_ms_p95": 0.6303311
     },
     {
       "method": "faiss hnsw",
       "M": 32,
       "ef": 500,
-      "build_seconds": 3.52,
+      "build_seconds": 3.71,
       "recall@10": 1.0,
-      "latency_ms_mean": 0.422638504,
-      "latency_ms_p50": 0.422957,
-      "latency_ms_p95": 0.45119615
+      "latency_ms_mean": 0.433083398,
+      "latency_ms_p50": 0.42609949999999996,
+      "latency_ms_p95": 0.52480105
     }
   ]
 }

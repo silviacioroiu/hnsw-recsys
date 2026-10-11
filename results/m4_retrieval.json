@@ -1,6 +1,6 @@
 {
   "runinfo": {
-    "timestamp_utc": "2026-10-11T16:10:53+00:00",
+    "timestamp_utc": "2026-10-11T16:13:46+00:00",
     "seed": 0,
     "params": {
       "M": 16,
@@ -29,7 +29,7 @@
         "fit_seconds": 32.6
       }
     },
-    "git_commit": "cebd0bb06e90fc2a910611e8e2ba14bca436d2a8",
+    "git_commit": "7dc3ed98036e1da1033c93c1b09e182dba2d4454",
     "git_dirty": false,
     "hardware": {
       "machine": "aarch64",
@@ -47,7 +47,7 @@
     }
   },
   "n_items": 31217,
-  "hnsw_build_seconds": 4.4,
+  "hnsw_build_seconds": 4.2,
   "results": [
     {
       "search": "exact",
@@ -58,7 +58,7 @@
       "n_users_evaluated": 6330,
       "n_users_without_history": 11946,
       "frac_positives_on_unknown_items": 0.12649541302113243,
-      "eval_ms_per_user": 0.718
+      "eval_ms_per_user": 0.673
     },
     {
       "search": "hnsw",
@@ -70,7 +70,7 @@
       "n_users_evaluated": 6330,
       "n_users_without_history": 11946,
       "frac_positives_on_unknown_items": 0.12649541302113243,
-      "eval_ms_per_user": 0.468
+      "eval_ms_per_user": 0.453
     },
     {
       "search": "hnsw",
@@ -82,7 +82,7 @@
       "n_users_evaluated": 6330,
       "n_users_without_history": 11946,
       "frac_positives_on_unknown_items": 0.12649541302113243,
-      "eval_ms_per_user": 0.463
+      "eval_ms_per_user": 0.447
     },
     {
       "search": "hnsw",
@@ -94,7 +94,7 @@
       "n_users_evaluated": 6330,
       "n_users_without_history": 11946,
       "frac_positives_on_unknown_items": 0.12649541302113243,
-      "eval_ms_per_user": 0.458
+      "eval_ms_per_user": 0.437
     },
     {
       "search": "hnsw",
@@ -106,7 +106,7 @@
       "n_users_evaluated": 6330,
       "n_users_without_history": 11946,
       "frac_positives_on_unknown_items": 0.12649541302113243,
-      "eval_ms_per_user": 0.465
+      "eval_ms_per_user": 0.469
     }
   ]
 }
